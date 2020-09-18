@@ -50,26 +50,29 @@ void swap_pair(node_t **head)
     }
 }
 
-void reverse(node_t **head)
-{
-    node_t *cursor = NULL;
-    node_t *next = NULL;
-
-    while (*head) {
-        next = (*head)->next;
-        (*head)->next = cursor;
-        cursor = *head;
-        
-        *head = next;
-    }
-    *head = cursor;
-}
-
 void print_list(node_t *head)
 {
     for (node_t *current = head; current; current = current->next)
         printf("%d ", current->value);
     printf("\n");
+}
+
+node_t* rev_recursive(node_t *curr, node_t **rev_h){
+    if(!(curr)->next){
+        *rev_h = curr;
+        return curr;
+    }
+    node_t* prev = rev_recursive(curr->next, rev_h);
+    prev->next = curr;
+    curr->next = NULL;
+    return curr;
+}
+
+void reverse(node_t **head)
+{
+    node_t* rev_h;
+    rev_recursive(*head, &rev_h);
+    *head = rev_h;
 }
 
 int main(int argc, char const *argv[])
