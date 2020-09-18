@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <time.h>
 
 typedef struct __node {
     int value;
@@ -75,6 +76,38 @@ void reverse(node_t **head)
     *head = rev_h;
 }
 
+void fy_shuffle(node_t** head){
+    node_t* tail = NULL, *rand_ptr = NULL;
+    node_t** tmp;
+    time_t t;
+    int len, tmp_value, rand_idx;
+
+    while(tail != *head){
+        tmp = head;
+        len = 1;
+
+        // find the tail of the list
+        while((*tmp)->next != tail){
+            len++;
+            tmp = &((*tmp)->next); 
+        }
+        tail = *tmp;
+
+        // find the random index pointer
+        srand((unsigned) time(&t));
+        rand_idx = (rand() % len);
+        rand_ptr = *head;
+        for(int i=0;i<rand_idx;i++){
+            rand_ptr = rand_ptr->next;
+        }
+
+        // swap the value of two nodes
+        tmp_value = rand_ptr->value;
+        rand_ptr->value = tail->value;
+        tail->value = tmp_value;
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     node_t *head = NULL;
@@ -104,8 +137,12 @@ int main(int argc, char const *argv[])
     swap_pair(&head);
     print_list(head);
 
+    printf("\nReverse list\n");
     reverse(&head);
     print_list(head);
 
+    fy_shuffle(&head);
+    printf("\nFisher–Yates shuffle algorithm\n");
+    print_list(head);
     return 0;
 }
