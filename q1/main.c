@@ -22,6 +22,35 @@ void add_entry(node_t **head, int new_value)
     *indirect = new_node;
 }
 
+void freeList(node_t* head)
+{
+    node_t* tmp;
+    while (head != NULL){
+       tmp = head;
+       head = head->next;
+       free(tmp);
+    }
+}
+
+void calc_time_complexity(){
+    FILE *fptr;
+    fptr = fopen("time.txt","w");
+    for(int i=1;i<15000;i+=50){
+        printf("%d\n", i);
+        node_t *head = NULL;
+        for(int j=0;j<i;j++){
+            add_entry(&head, j);
+        }
+        clock_t t; 
+        t = clock(); 
+        fy_shuffle(&head);
+        t = clock() - t; 
+        fprintf(fptr,"%d %f\n", i, time_taken);
+        freeList(head);
+    }
+    fclose(fptr);
+}
+
 node_t *find_entry(node_t *head, int value)
 {
     node_t *current = head;
